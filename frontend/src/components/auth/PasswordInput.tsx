@@ -17,7 +17,7 @@ export interface PasswordInputProps {
   onChange: (value: string) => void;
 }
 
-export default function PasswordInput({
+export function PasswordInput({
   id = "password",
   label = "Password",
   autoComplete = "current-password",

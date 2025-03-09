@@ -1,6 +1,6 @@
 'use client';
 
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { Box, Container, Paper, Typography, Alert } from '@mui/material';
 
 export interface AuthContainerProps {
@@ -9,7 +9,18 @@ export interface AuthContainerProps {
   children: ReactNode;
 }
 
-export default function AuthContainer({ title, error, children }: AuthContainerProps) {
+export function AuthContainer({ title, error, children }: AuthContainerProps) {
+  const [mounted, setMounted] = useState(false);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  
+  // Return null on first render to avoid hydration mismatch
+  if (!mounted) {
+    return null;
+  }
+  
   return (
     <Container maxWidth="sm">
       <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>

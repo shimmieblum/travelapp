@@ -1,20 +1,27 @@
-'use client';
+"use client";
 
-import { ReactNode } from 'react';
-import { Box, Divider } from '@mui/material';
+import { ReactNode } from "react";
+import { Box, Divider } from "@mui/material";
+import exp from "constants";
 
 export interface AuthSubcontainerProps {
   children: ReactNode;
-  withDivider?: boolean;
 }
 
-export default function AuthSubcontainer({ children, withDivider = false }: AuthSubcontainerProps) {
+export function AuthSubcontainer({ children }: AuthSubcontainerProps) {
   return (
     <>
       <Box component="form" sx={{ mt: 2 }}>
         {children}
       </Box>
-      {withDivider && <Divider sx={{ my: 2 }}>or</Divider>}
     </>
   );
+}
+
+export interface StyledDividerProps {
+  text?: string;
+}
+
+export function StyledDivider({ text }: StyledDividerProps) {
+  return <Divider sx={{ my: 2 }}>{text}</Divider>;
 }

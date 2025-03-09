@@ -8,7 +8,7 @@ export interface SubmitButtonProps {
   onSubmit: () => void;
 }
 
-export default function SubmitButton({ loading, text, onSubmit }: SubmitButtonProps) {
+export function SubmitButton({ loading, text, onSubmit }: SubmitButtonProps) {
   return (
     <Button
       type="submit"
