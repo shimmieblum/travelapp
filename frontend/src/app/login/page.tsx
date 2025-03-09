@@ -2,15 +2,20 @@
 
 import { useState } from "react";
 import { createClient } from "@/utils/supabase/client";
-import AuthContainer from "@/components/auth/AuthContainer";
-import AuthSubcontainer from "@/components/auth/AuthSubcontainer";
-import AuthTextInput from "@/components/auth/TextInput";
-import PasswordInput from "@/components/auth/PasswordInput";
-import SubmitButton from "@/components/auth/SubmitButton";
-import GoogleSignIn from "@/components/auth/GoogleSignIn";
+import {
+  AuthContainer,
+  AuthSubcontainer,
+  AuthTextInput,
+  PasswordInput,
+  SubmitButton,
+  StyledDivider,
+  AuthNavLink,
+} from "@/components/auth";
 import { AuthError } from "@supabase/supabase-js";
+import { redirect, useRouter } from "next/navigation"; // Changed this import
 
 export default function Login() {
+  const router = useRouter(); // Add this line to get the router instance
   const supabase = createClient();
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -22,46 +27,53 @@ export default function Login() {
     setError(null);
     const data = { email, password };
     try {
-      const { error } = await supabase.auth.signInWithPassword(data);
+      // Sign in with password
+      const { error, data: signInData } =
+        await supabase.auth.signInWithPassword(data);
 
       if (error) throw error;
-      // Redirect will happen automatically if session is established
+      console.log(signInData); // Log the response
+
+      // Set a small delay to ensure cookies are properly set
+      router.push("/welcome"); // Use the redirect function instead of router.push("/welcome")
     } catch (error) {
       const message =
         error instanceof AuthError
           ? error.message
           : "An error occurred during login";
       setError(message);
+    } finally {
       setLoading(false);
     }
   };
 
-  const handleSocialAuth = async (provider: "google") => {
-    setLoading(true);
-    setError(null);
+  // const handleSocialAuth = async (provider: "google") => {
+  //   setLoading(true);
+  //   setError(null);
 
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider,
-        options: {
-          redirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
+  //   try {
+  //     const { error } = await supabase.auth.signInWithOAuth({
+  //       provider,
+  //       options: {
+  //         redirectTo: `${window.location.origin}/auth/callback`,
+  //       },
+  //     });
 
-      if (error) throw error;
-    } catch (error) {
-      const message =
-        error instanceof AuthError
-          ? error.message
-          : "An error occurred during login";
-      setError(message);
-      setLoading(false);
-    }
-  };
+  //     if (error) throw error;
+  //   } catch (error) {
+  //     const message =
+  //       error instanceof AuthError
+  //         ? error.message
+  //         : "An error occurred during login";
+  //     setError(message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   return (
     <AuthContainer title="Sign in" error={error}>
-      <AuthSubcontainer withDivider={true}>
+      <AuthSubcontainer>
         <AuthTextInput
           id="email"
           autoFocus={true}
@@ -74,13 +86,19 @@ export default function Login() {
           text="Sign In"
           onSubmit={handleSignin}
         />
+        <AuthNavLink
+          text="Don't have an account?"
+          linkText="Sign up"
+          href="/signup"
+        />
       </AuthSubcontainer>
-      <AuthSubcontainer>
+      {/* <StyledDivider text="or"/>
+      {/* <AuthSubcontainer>
         <GoogleSignIn
           handler={() => handleSocialAuth("google")}
           loading={loading}
         />
-      </AuthSubcontainer>
+      </AuthSubcontainer> */}
     </AuthContainer>
   );
 }

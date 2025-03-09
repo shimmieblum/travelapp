@@ -12,7 +12,7 @@ export interface AuthTextInputProps {
   onChange: (value: string) => void;
 }
 
-export default function AuthTextInput({
+export function AuthTextInput({
   id,
   label,
   autoComplete,
