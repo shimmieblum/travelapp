@@ -12,7 +12,7 @@ import {
   AuthNavLink,
 } from "@/components/auth";
 import { AuthError } from "@supabase/supabase-js";
-import { redirect, useRouter } from "next/navigation"; // Changed this import
+import { useRouter } from "next/navigation"; // Changed this import
 
 export default function Login() {
   const router = useRouter(); // Add this line to get the router instance
