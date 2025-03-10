@@ -25,7 +25,6 @@ export function AuthContainer({ title, error, children }: AuthContainerProps) {
           <Typography component="h1" variant="h5" align="center">
             {title}
           </Typography>
-          <ErrorAlert error={error} />
           {children}
         </Paper>
       </Box>

@@ -9,6 +9,7 @@ import {
   PasswordInput,
   SubmitButton,
   AuthNavLink,
+  ErrorAlert,
 } from "@/components/auth";
 import { AuthError } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation";
@@ -51,9 +52,10 @@ export default function signup() {
       setLoading(false);
     }
   };
-
+  
   return (
     <AuthContainer title="Sign up" error={error}>
+      <ErrorAlert error={error} />
       <AuthSubcontainer>
         <AuthTextInput
           id="name"

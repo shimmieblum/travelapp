@@ -10,6 +10,7 @@ import {
   SubmitButton,
   StyledDivider,
   AuthNavLink,
+  ErrorAlert,
 } from "@/components/auth";
 import { AuthError } from "@supabase/supabase-js";
 import { useRouter } from "next/navigation"; // Changed this import
@@ -73,6 +74,7 @@ export default function Login() {
 
   return (
     <AuthContainer title="Sign in" error={error}>
+      <ErrorAlert error={error} />
       <AuthSubcontainer>
         <AuthTextInput
           id="email"
