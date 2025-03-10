@@ -36,9 +36,7 @@ export default function WelcomePage() {
         data: { user },
       } = await supabase.auth.getUser();
       if (user) {
-        setUserName(
-          user.user_metadata?.name || user.email?.split("@")[0] || "there"
-        );
+        setUserName(user.user_metadata?.name || "defaultname");
       } else {
         setError("User information could not be retrieved.");
       }
@@ -60,36 +58,32 @@ export default function WelcomePage() {
     router.push("/login");
   };
 
-  if (loading) {
-    return (
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-        }}
-      >
-        <CircularProgress />
-      </Box>
-    );
-  }
+  const Loading = () => (
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+      }}
+    >
+      <CircularProgress />
+    </Box>
+  );
 
-  if (error) {
-    return (
-      <Container maxWidth="sm" sx={{ mt: 8 }}>
-        <Alert severity="error" sx={{ mb: 2 }}>
-          {error}
-        </Alert>
-        <Typography variant="body2" align="center">
-          Redirecting to login page...
-        </Typography>
-      </Container>
-    );
-  }
+  const ErrorAlert = () => (
+    <>
+      <Alert severity="error" sx={{ mb: 2 }}>
+        {error}
+      </Alert>
+      <Typography variant="body2" align="center">
+        Redirecting to login page...
+      </Typography>
+    </>
+  );
 
-  return (
-    <Container maxWidth="md" sx={{ mt: 8 }}>
+  const WelcomePage = () => (
+    <>
       <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
         <Typography variant="h4" component="h1" gutterBottom>
           Hi {userName}!
@@ -103,6 +97,12 @@ export default function WelcomePage() {
           </Button>
         </Box>
       </Paper>
+    </>
+  );
+
+  return (
+    <Container maxWidth="md" sx={{ mt: 8 }}>
+      {loading ? <Loading /> : error ? <ErrorAlert /> : <WelcomePage />}
     </Container>
   );
 }

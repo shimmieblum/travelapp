@@ -4,3 +4,4 @@ export * from "./SubmitButton";
 export * from "./PasswordInput";
 export * from "./TextInput"
 export * from "./AuthNavLink"
+export * from "./ErrorAlert"
