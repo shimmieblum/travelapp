@@ -1,19 +1,22 @@
 "use client";
 
-import { Box, Typography, Paper } from "@mui/material";
+import { Paper, Typography, Box } from "@mui/material";
 
 interface WelcomeMessageProps {
-  name: string;
+  userName: string;
 }
 
-export default function WelcomeMessage({ name }: WelcomeMessageProps) {
+export function WelcomeMessage({ userName }: WelcomeMessageProps) {
   return (
-    <Paper elevation={2} sx={{ p: 4, borderRadius: 2 }}>
+    <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
       <Typography variant="h4" component="h1" gutterBottom>
-        Welcome, {name}!
+        Hi {userName}!
       </Typography>
-      <Typography variant="body1">
-        We're excited to have you here. Start planning your next adventure with us.
+      <Typography variant="body1" paragraph>
+        Welcome to your travel app. You've successfully logged in.
+      </Typography>
+      <Typography variant="body2" paragraph>
+        Use the menu in the top left to navigate through the app.
       </Typography>
     </Paper>
   );

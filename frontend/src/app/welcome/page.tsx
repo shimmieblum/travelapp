@@ -3,15 +3,11 @@
 import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 import { useRouter } from "next/navigation";
-import {
-  Box,
-  Typography,
-  Container,
-  Paper,
-  Button,
-  CircularProgress,
-  Alert,
-} from "@mui/material";
+import { Container } from "@mui/material";
+import { AuthenticatedLayout } from "@/components/layouts/AuthenticatedLayout";
+import { WelcomeMessage } from "@/components/welcome/WelcomeMessage";
+import { LoadingScreen } from "@/components/ui/LoadingScreen";
+import { ErrorMessage } from "@/components/ui/ErrorMessage";
 
 export default function WelcomePage() {
   const router = useRouter();
@@ -53,56 +49,19 @@ export default function WelcomePage() {
     checkAuth();
   }, [router, supabase]);
 
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    router.push("/login");
-  };
+  if (loading) {
+    return <LoadingScreen />;
+  }
 
-  const Loading = () => (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        height: "100vh",
-      }}
-    >
-      <CircularProgress />
-    </Box>
-  );
-
-  const ErrorAlert = () => (
-    <>
-      <Alert severity="error" sx={{ mb: 2 }}>
-        {error}
-      </Alert>
-      <Typography variant="body2" align="center">
-        Redirecting to login page...
-      </Typography>
-    </>
-  );
-
-  const WelcomePage = () => (
-    <>
-      <Paper elevation={3} sx={{ p: 4, borderRadius: 2 }}>
-        <Typography variant="h4" component="h1" gutterBottom>
-          Hi {userName}!
-        </Typography>
-        <Typography variant="body1" paragraph>
-          Welcome to your travel app. You've successfully logged in.
-        </Typography>
-        <Box sx={{ mt: 4 }}>
-          <Button variant="outlined" color="primary" onClick={handleSignOut}>
-            Sign Out
-          </Button>
-        </Box>
-      </Paper>
-    </>
-  );
+  if (error) {
+    return <ErrorMessage message={error} redirecting={true} />;
+  }
 
   return (
-    <Container maxWidth="md" sx={{ mt: 8 }}>
-      {loading ? <Loading /> : error ? <ErrorAlert /> : <WelcomePage />}
-    </Container>
+    <AuthenticatedLayout>
+      <Container maxWidth="md" sx={{ mt: 4 }}>
+        <WelcomeMessage userName={userName} />
+      </Container>
+    </AuthenticatedLayout>
   );
 }

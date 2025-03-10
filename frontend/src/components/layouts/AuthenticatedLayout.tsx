@@ -1,19 +1,18 @@
 "use client";
 
+import { ReactNode, useState } from "react";
 import { Box, AppBar, Toolbar, IconButton, Typography, CssBaseline } from "@mui/material";
 import { Menu as MenuIcon } from "@mui/icons-material";
 import { Sidebar } from "@/components/navigation/Sidebar";
-import { ReactNode, useState } from "react";
 
-interface DashboardLayoutProps {
+interface AuthenticatedLayoutProps {
   children: ReactNode;
   title?: string;
 }
 
-export default function DashboardLayout({ children, title = "Travel App" }: DashboardLayoutProps) {
+export function AuthenticatedLayout({ children, title = "Travel App" }: AuthenticatedLayoutProps) {
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const sidebarWidth = 240;
-  
+
   const toggleDrawer = () => {
     setDrawerOpen(!drawerOpen);
   };
@@ -37,9 +36,9 @@ export default function DashboardLayout({ children, title = "Travel App" }: Dash
           </Typography>
         </Toolbar>
       </AppBar>
-      <Sidebar open={drawerOpen} onClose={toggleDrawer} width={sidebarWidth} />
+      <Sidebar open={drawerOpen} onClose={toggleDrawer} />
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-        <Toolbar /> {/* This creates space below the AppBar */}
+        <Toolbar />
         {children}
       </Box>
     </Box>

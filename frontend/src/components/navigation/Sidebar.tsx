@@ -1,64 +1,44 @@
 "use client";
 
-import { createClient } from "@/utils/supabase/client";
-import { Box, Drawer, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider } from "@mui/material";
-import { LogoutOutlined, HomeOutlined, ExploreOutlined } from "@mui/icons-material";
+import { Box, Toolbar, List, ListItemButton, ListItemIcon, ListItemText, Divider, Drawer } from "@mui/material";
 import { useRouter } from "next/navigation";
+import { sidebarTabs } from "@/config/sidebarConfig";
 
 interface SidebarProps {
+  open: boolean;
+  onClose: () => void;
   width?: number;
 }
 
-export default function Sidebar({ width = 240 }: SidebarProps) {
+export function Sidebar({ open, onClose, width = 240 }: SidebarProps) {
   const router = useRouter();
-  const supabase = createClient();
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.push("/login");
-  };
 
   return (
     <Drawer
-      variant="permanent"
+      variant="temporary"
+      open={open}
+      onClose={onClose}
       sx={{
         width: width,
         flexShrink: 0,
         [`& .MuiDrawer-paper`]: { width: width, boxSizing: 'border-box' },
       }}
     >
-      <Box sx={{ overflow: 'auto', height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <Toolbar />
+      <Box sx={{ overflow: 'auto' }}>
         <List>
-          <ListItem disablePadding>
-            <ListItemButton onClick={() => router.push("/welcome")}>
-              <ListItemIcon>
-                <HomeOutlined />
-              </ListItemIcon>
-              <ListItemText primary="Home" />
-            </ListItemButton>
-          </ListItem>
-          <ListItem disablePadding>
-            <ListItemButton onClick={() => router.push("/explore")}>
-              <ListItemIcon>
-                <ExploreOutlined />
-              </ListItemIcon>
-              <ListItemText primary="Explore" />
-            </ListItemButton>
-          </ListItem>
-        </List>
-        <Divider />
-        <Box sx={{ marginTop: 'auto' }}>
-          <List>
-            <ListItem disablePadding>
-              <ListItemButton onClick={handleLogout}>
+          {sidebarTabs.map((tab) => (
+            <Box key={tab.id}>
+              <ListItemButton onClick={() => tab.action(onClose, router)}>
                 <ListItemIcon>
-                  <LogoutOutlined />
+                  {tab.icon}
                 </ListItemIcon>
-                <ListItemText primary="Logout" />
+                <ListItemText primary={tab.label} />
               </ListItemButton>
-            </ListItem>
-          </List>
-        </Box>
+              {tab.dividerAfter && <Divider />}
+            </Box>
+          ))}
+        </List>
       </Box>
     </Drawer>
   );
