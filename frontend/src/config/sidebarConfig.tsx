@@ -5,58 +5,39 @@ import {
   Logout as LogoutIcon,
   Settings as SettingsIcon 
 } from "@mui/icons-material";
-import { createClient } from "@/utils/supabase/client";
 
-export interface SidebarTab {
+export interface SidebarTabConfig {
   id: string;
   label: string;
   icon: ReactNode;
-  action: (onClose: () => void, router: any) => void;
+  url?: string; // Optional URL, defaults to id if not specified
   dividerAfter?: boolean;
 }
 
-export const sidebarTabs: SidebarTab[] = [
+export const sidebarTabConfigs: SidebarTabConfig[] = [
   {
     id: "home",
     label: "Home",
     icon: <HomeIcon />,
-    action: (onClose, router) => {
-      onClose();
-      if (window.location.pathname === '/welcome') {
-        window.location.reload();
-      } else {
-        router.push('/welcome');
-      }
-    }
+    url: "/welcome" // Custom URL for home
   },
   {
     id: "profile",
     label: "Profile",
     icon: <PersonIcon />,
-    action: (onClose, router) => {
-      onClose();
-      router.push('/profile');
-    }
+    // url defaults to "/profile"
   },
   {
     id: "settings",
     label: "Settings",
     icon: <SettingsIcon />,
-    action: (onClose, router) => {
-      onClose();
-      router.push('/settings');
-    },
+    // url defaults to "/settings"
     dividerAfter: true
   },
   {
     id: "logout",
     label: "Logout",
     icon: <LogoutIcon />,
-    action: async (onClose, router) => {
-      onClose();
-      const supabase = createClient();
-      await supabase.auth.signOut();
-      router.push('/login');
-    }
+    // url defaults to "/logout"
   }
 ];
